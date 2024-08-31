@@ -5,12 +5,31 @@
 	box-sizing: border-box;
 	font-family: system-ui;
 }
-
+#chipid{
+	display: none;
+}
 #wrapper{
 	width: 100%;
 	height: 100vh;
 }
-
+.display_none{
+	display: none!important;
+}
+.red{
+	color: rgb(255, 0, 0);
+}
+.blue{
+	color: rgb(0, 0, 255);
+}
+.orange{
+	color: rgb(255, 166, 0);
+}
+.green{
+	color: rgb(0, 128, 0);
+}
+.lightblue{
+	color: rgb(173, 216, 230);
+}
 .flexCenter{
 	display: flex;
 	align-items: center;
@@ -72,7 +91,8 @@ h1{
 	scale: 1.05;
 }
 .header__panel{
-
+	position: sticky;
+	top: 0;
 	height: 10%;
 	width: 100%;
 	 background: rgb(63,94,251);
@@ -125,6 +145,179 @@ h1{
 				padding: .2rem;
 				color: whitesmoke;
 			}
+		}
+	}
+	#stats_list{
+		display: flex;
+		justify-content: center;
+		gap: 1rem;
+		flex-wrap: wrap;
+		.item{
+			cursor: pointer;
+			text-decoration: none;
+			color: black;
+			padding: 1rem;
+			border: 1px solid rgba(0, 0, 0,.5);
+			box-shadow: 1px 1px 100px -5px rgba(0, 0, 0, 0.2);
+			border-radius: 1rem;
+			width: 10rem;
+			height: fit-content;
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+			gap:.5rem;
+			transition: all .2s ease;
+		}
+		.item:hover{
+			transform: scale(1.05);
+			box-shadow: 0px 0px 10px 1px rgba(44, 166, 247, 0.3);
+		}
+	}
+	#graph{
+		width: 100%;
+		height: 27rem;
+		display: grid;
+		place-items: center;
+		.conten{
+			text-decoration: none;
+			color: black;
+			padding: 1rem;
+			width: 90%;
+			height: 20rem;
+			border: 1px solid rgba(0, 0, 0,.5);
+			box-shadow: 1px 1px 100px -5px rgba(0, 0, 0, 0.2);
+			border-radius: 1rem;
+			display: flex;
+			
+			gap:.5rem;
+			.context{
+				width: 40%;
+				height: 100%;
+			}
+			.grafico{
+				 display: flex; /* Usar flexbox para alinear elementos hijos si es necesario */
+		        justify-content: center; /* Centrar el canvas horizontalmente */
+		        align-items: center; 
+				width: 60%;
+				height: 100%;
+					
+			}
+			
+		}
+	}
+	.header__graph{
+		display: flex;
+		height: 20%;
+		align-items: center;
+		font-size: 1.3rem;
+		.red{
+			font-size: 2rem;
+		}
+	}
+}
+.header__real{
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-weight: 1000;
+	}
+.temperatura{
+	display: grid;
+	height: 80%;
+	grid-template-columns: 50% 50%;
+	.real{
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
+	.sensacion{
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		border-left: solid black 1px;
+	}
+	
+
+	.big-number{
+		display: flex;
+		justify-content: center;
+		.temperatura-int{
+		font-size: 4rem;
+		}
+		.unidad{
+			font-size: 2rem;
+		}
+		.temperatura-float {
+			font-size: 1.5rem;
+		}
+	}
+	.min-max{
+		display: flex;
+		align-items: center;
+		justify-content: space-around;
+		.header{
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+	}
+	.item{
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		p{
+			font-weight: 1000;
+		}
+	}
+}
+
+.info{
+	width: 100%;
+	height: 100%;
+	p{
+		display: grid;
+		place-items: center;
+		font-size: 3rem;
+		font-weight: bold;
+	}
+}
+
+#Fuego_info{
+	.info{
+		display: flex;
+		flex-direction: column;
+	}
+	.columnas{
+		display: grid;
+		grid-template-columns: 50% 50%;
+		div{
+			display: grid;
+			place-items: center;
+		}
+		p{
+			display: block;
+			font-size: 1rem;
+			font-weight: 400;
+		}
+	}
+}
+
+.velocidad{
+	display:flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-direction: column;
+	.item{
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		p{
+			font-size:1rem;
+			font-weight: 1000;
 		}
 	}
 }
