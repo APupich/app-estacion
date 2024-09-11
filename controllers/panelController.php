@@ -5,8 +5,6 @@
 	// crea el objeto con la vista
 	$tpl = new Kiwi("panel");
 
-	// carga la vista
-	$tpl->loadTPL();
 
 	// Reemplaza las variables de la vista
 	// $tpl->setVarsTPL();

@@ -22,6 +22,7 @@
 		function __construct($name_tpl){
 
 			$this->name_tpl = $name_tpl;
+			$this->loadTPL();
 		}
 
 

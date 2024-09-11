@@ -260,7 +260,7 @@
 		const CHIPID = document.getElementById('chipid').innerText;
 		const URL = `https://mattprofe.com.ar/proyectos/app-estacion/datos.php?chipid=${CHIPID}&cant=7`
 		refresh();
-		setInterval(refresh, 60000);
+		setInterval(refresh, 30000);
 		
 		function refresh(){
 			getStation(URL).then(data => {
