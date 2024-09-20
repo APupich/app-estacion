@@ -92,7 +92,7 @@
 			/*< recupera el email del formulario*/
 			if (!isset($form["txt_email"])) {
 				return  ["error" => "Email no definido", "errno" => 402];
-			}
+			} 
 			$email = $form["txt_email"];
 
 			/*< consultamos si existe el email*/
@@ -110,7 +110,9 @@ se ha validado, revise su casilla de correo", "errno" => 404];
 
 			}
 			if ($result["blocked"]=="1") {
+				$this->recovery(["txt_email"=>$email]);
 				return ["error" => "Su usuario está bloqueado, revise su casilla de correo", "errno" => 404];
+
 
 			}
 			if ($result["recovery"]=="1") {
@@ -129,7 +131,7 @@ se ha validado, revise su casilla de correo", "errno" => 404];
 				// para que los avatares sean gatitos
 
 				/*< carga la clase en la sesión*/
-				$_SESSION["morphyx"]['user'] = $this;
+				$_SESSION[$_ENV['PROJECT_NAME']]['user'] = $this;
 
 				/*< usuario valido*/
 				return ["error" => "Acceso valido", "errno" => 200];

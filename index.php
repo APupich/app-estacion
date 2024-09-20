@@ -44,7 +44,7 @@
 	$controlador_anonimo = ["landing", "login", "register","reset","recovery","verify"];
 
 	// sesion iniciada
-	if(isset($_SESSION['morphyx'])){
+	if(isset($_SESSION[$_ENV['PROJECT_NAME']])){
 		
 		// recorre la lista de secciones no permitidas
 		foreach ($controlador_anonimo as $key => $value) {
