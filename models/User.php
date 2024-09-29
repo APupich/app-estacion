@@ -43,7 +43,43 @@
 			
 
 		}
+		function list_client_location(){
+			$result = $this->query("CALL `list-client-location`()");
+			return $result;
+		}
+		function create_client_location(){
+			$ip = $_SERVER['REMOTE_ADDR']; 
+			$token = bin2hex(random_bytes(16)); 
+			$pais = 'Desconocido';
+			$browser = $_SERVER['HTTP_USER_AGENT'];
+			// Determinar el sistema operativo
+			$os = 'Desconocido';
+			if (preg_match('/linux/i', $browser)) {
+			    $os = 'Linux';
+			} elseif (preg_match('/macintosh|mac os x/i', $browser)) {
+			    $os = 'Mac OS X';
+			} elseif (preg_match('/windows|win32/i', $browser)) {
+			    $os = 'Windows';
+			}
+			$add_date = date('Y-m-d H:i:s');	
 
+			// Consulta a la API para obtener latitud y longitud a partir de la IP
+			$web = file_get_contents("http://ipwho.is/".$ip);
+			$response = json_decode($web, true);
+			$latitud = $response["latitude"];
+			$longitud = $response["longitude"];
+			$pais = $response["country"];
+
+			$result = $this->query("INSERT INTO appestacion__tracker (token, ip, latitud, longitud, pais, navegador, sistema) 
+        VALUES ('$token', '$ip', '$latitud', '$longitud', '$pais','$browser' , '$os')");
+			return $result;
+		}
+		function get_users(){
+			$result = $this->query("SELECT 
+			    (SELECT COUNT(*) FROM appestacion__users) AS total_users, 
+			    (SELECT COUNT(*) FROM appestacion__tracker) AS total_tracker;");
+			return $result[0];
+		}
 		/**
 		 * 
 		 * Hace soft delete del registro
@@ -127,16 +163,7 @@ se ha validado, revise su casilla de correo", "errno" => 404];
 				foreach ($this->nameOfFields as $key => $value) {
 					$this->$value = $result[$value];
 				}
-
-				// para que los avatares sean gatitos
-
-				/*< carga la clase en la sesión*/
-				$_SESSION[$_ENV['PROJECT_NAME']]['user'] = $this;
-
-				/*< usuario valido*/
-				return ["error" => "Acceso valido", "errno" => 200];
-			}
-			$correo = new Mailer();
+				$correo = new Mailer();
 			$ip = $_SERVER['REMOTE_ADDR'];
 $browser = $_SERVER['HTTP_USER_AGENT'];
 
@@ -226,6 +253,111 @@ $cuerpo_email = <<<HTML
             </tr>
         </table>
         <p>Si no fuiste tú quien inició sesión, por favor, bloquea tu cuenta inmediatamente haciendo clic en el siguiente botón:</p>
+        <a href="{$blockUrl}" class="button">No fui yo, bloquear cuenta</a>
+    </div>
+</body>
+</html>
+HTML;
+
+				/*< envia el correo electrónico de validación*/
+				$correo->send(["destinatario" => $email, "motivo" => "Intento de inicio de sesion", "contenido" => $cuerpo_email] );
+
+				/*< carga la clase en la sesión*/
+				$_SESSION[$_ENV['PROJECT_NAME']]['user'] = $this;
+
+				/*< usuario valido*/
+				return ["error" => "Acceso valido", "errno" => 200];
+			}
+			$correo = new Mailer();
+			$ip = $_SERVER['REMOTE_ADDR'];
+$browser = $_SERVER['HTTP_USER_AGENT'];
+
+// Determinar el sistema operativo
+$os = 'Desconocido';
+if (preg_match('/linux/i', $browser)) {
+    $os = 'Linux';
+} elseif (preg_match('/macintosh|mac os x/i', $browser)) {
+    $os = 'Mac OS X';
+} elseif (preg_match('/windows|win32/i', $browser)) {
+    $os = 'Windows';
+}
+
+// URL para bloquear la cuenta
+$blockUrl = 'https://mattprofe.com.ar/alumno/6826/app-estacion/blocked?token='.$this->new_token($email);;
+
+$cuerpo_email = <<<HTML
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información de Inicio de Sesión</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #ffffff;
+            background-color: #d9534f;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .button:hover {
+            background-color: #c9302c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Información de Inicio de Sesión</h1>
+        <p>Hemos detectado un inicio de sesión fallido en tu cuenta con la siguiente información:</p>
+        <table>
+            <tr>
+                <th>IP</th>
+                <td>{$ip}</td>
+            </tr>
+            <tr>
+                <th>Sistema Operativo</th>
+                <td>{$os}</td>
+            </tr>
+            <tr>
+                <th>Navegador Web</th>
+                <td>{$browser}</td>
+            </tr>
+        </table>
+        <p>Si no fuiste tú quien intento iniciar sesión, por favor, bloquea tu cuenta inmediatamente haciendo clic en el siguiente botón:</p>
         <a href="{$blockUrl}" class="button">No fui yo, bloquear cuenta</a>
     </div>
 </body>

@@ -40,7 +40,7 @@
 	//=== firewall
 
 	// Listas de acceso dependiendo del estado del usuario
-	$controlador_login = ["panel","logout", "abandonar"];
+	$controlador_login = ["panel","logout", "abandonar","administrator"];
 	$controlador_anonimo = ["landing", "login", "register","reset","recovery","verify"];
 
 	// sesion iniciada
@@ -54,7 +54,10 @@
 				break;
 			}
 		}
-
+		if (($controlador=="map"||$controlador=="administrator")&&$_SESSION[$_ENV["PROJECT_NAME"]]["user"]->email != "admin-estacion") {
+			$controlador = "panel";
+		}
+		
 	}else{ // sesión no iniciada
 
 			// recorre la lista de secciones no permitidas
@@ -67,7 +70,6 @@
 		}
 
 	}
-
 	// === fin firewall
 
 
